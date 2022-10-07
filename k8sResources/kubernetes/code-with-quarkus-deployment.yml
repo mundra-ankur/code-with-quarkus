@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    jkube.io/git-url: https://github.com/mundra-ankur/code-with-quarkus.git
+    jkube.io/git-commit: b884ed1dd85b56b1a03ed7362318baf3b33698ec
+    jkube.io/git-branch: main
+  labels:
+    app: code-with-quarkus
+    provider: jkube
+    version: 1.0.0-SNAPSHOT
+    group: org.acme
+  name: code-with-quarkus
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: code-with-quarkus
+      provider: jkube
+      group: org.acme
+  template:
+    metadata:
+      annotations:
+        jkube.io/git-url: https://github.com/mundra-ankur/code-with-quarkus.git
+        jkube.io/git-commit: b884ed1dd85b56b1a03ed7362318baf3b33698ec
+        jkube.io/git-branch: main
+      labels:
+        app: code-with-quarkus
+        provider: jkube
+        version: 1.0.0-SNAPSHOT
+        group: org.acme
+      name: code-with-quarkus
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: acme/code-with-quarkus:latest
+        imagePullPolicy: IfNotPresent
+        name: quarkus
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9779
+          name: prometheus
+          protocol: TCP
+        - containerPort: 8778
+          name: jolokia
+          protocol: TCP
+        securityContext:
+          privileged: false

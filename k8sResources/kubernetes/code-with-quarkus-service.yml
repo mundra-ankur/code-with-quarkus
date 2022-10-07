@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/path: /metrics
+    jkube.io/git-branch: main
+    prometheus.io/port: "9779"
+    prometheus.io/scrape: "true"
+    jkube.io/git-url: https://github.com/mundra-ankur/code-with-quarkus.git
+    jkube.io/git-commit: b884ed1dd85b56b1a03ed7362318baf3b33698ec
+  labels:
+    app: code-with-quarkus
+    provider: jkube
+    version: 1.0.0-SNAPSHOT
+    group: org.acme
+  name: code-with-quarkus
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: code-with-quarkus
+    provider: jkube
+    group: org.acme
